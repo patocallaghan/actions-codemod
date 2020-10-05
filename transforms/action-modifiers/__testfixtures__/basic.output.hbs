@@ -1,0 +1,55 @@
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  @onSelectItem={{this.changeOwner}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  onClick={{this.onClick}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  onClick={{fn this.onClick "test"}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+{{!-- With params --}}
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  @onSelectItem={{fn this.changeOwner test}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+{{!-- mut helper --}}
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  @onClick={{action (mut settings.teammateCalendarUrl)}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+{{!-- passed function --}}
+<Admin::NewSelector
+  @assignees={{app.assignableAdminsWithoutUnassigned}}
+  @onClick={{action update}}
+  @teammatesHeading="Select account owner"
+  data-test-owner-selector={{true}}
+/>
+
+{{!-- Dom handlers --}}
+<input
+  value={{settings.teammateCalendarUrl}}
+  maxlength="30"
+  data-test-better-url-input
+  placeholder={{adminUrlPlaceholder}}
+  onblur={{action "endEditingUrl"}}
+  oninput={{action (mut settings.teammateCalendarUrl) value="target.value"                    }}
+  onkeypress={{action "blurOnEnter"}}
+/>

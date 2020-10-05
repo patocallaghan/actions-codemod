@@ -10,7 +10,7 @@ function addImportSpecifier(j, code, importSpecifier, source) {
     })
     .forEach((path) => {
       let hasComputedSpecifier = path.value.specifiers.find(
-        (specifier) => specifier.imported.name === importSpecifier,
+        (specifier) => specifier.imported && specifier.imported.name === importSpecifier,
       );
       if (!hasComputedSpecifier) {
         path.value.specifiers.push(j.importSpecifier(j.identifier(importSpecifier)));

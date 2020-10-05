@@ -55,6 +55,7 @@ export default Component.extend({
 
 **Output** (<small>[basic.output.js](transforms/action-hash/__testfixtures__/basic.output.js)</small>):
 ```js
+import { action } from '@ember/object';
 import Component from '@ember/component';
 
 export default Component.extend({
@@ -76,7 +77,7 @@ export default Component.extend({
 
   baz: action(function(predicate, updatedPredicate) {
     predicate.setProperties(updatedPredicate);
-  })
+  }),
 });
 
 ```

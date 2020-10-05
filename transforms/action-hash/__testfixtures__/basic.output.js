@@ -1,3 +1,4 @@
+import { action } from '@ember/object';
 import Component from '@ember/component';
 
 export default Component.extend({
@@ -19,5 +20,5 @@ export default Component.extend({
 
   baz: action(function(predicate, updatedPredicate) {
     predicate.setProperties(updatedPredicate);
-  })
+  }),
 });

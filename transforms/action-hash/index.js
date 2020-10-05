@@ -1,5 +1,7 @@
 const { getParser } = require('codemod-cli').jscodeshift;
 const { getOptions } = require('codemod-cli');
+const addImportSpecifier = require('../../util/add-import-specifier');
+const FORMATTING = require('../../util/formatting');
 
 module.exports = function transformer(file, api) {
   const j = getParser(api);
@@ -23,9 +25,9 @@ module.exports = function transformer(file, api) {
         return false;
       });
     })
-    .toSource();
+    .toSource(FORMATTING);
 
-  return j(code)
+  code = j(code)
     .find(j.ObjectProperty, {
       key: {
         type: 'Identifier',
@@ -37,7 +39,10 @@ module.exports = function transformer(file, api) {
         j(path).remove();
       }
     })
-    .toSource();
+    .toSource(FORMATTING);
+
+  code = addImportSpecifier(j, code, 'action', '@ember/object');
+  return j(code).toSource(FORMATTING);
 };
 
 module.exports.type = 'js';

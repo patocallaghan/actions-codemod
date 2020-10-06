@@ -27,6 +27,7 @@ async function run() {
         ActionsMap.map.set('actions', JSON.stringify(actionsCache));
       }
     });
+    console.log(ActionsMap.getCache('actions'));
 
     let modifyArgs = [].concat(args, '--should-modify=true');
     console.log('==== Removing {{action}} from templates ====');

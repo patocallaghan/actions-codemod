@@ -23,12 +23,16 @@ function addImportSpecifier(j, code, importSpecifier, source) {
     code = j(code)
       .find(j.Program)
       .forEach((path) => {
-        path.value.body.unshift(
-          j.importDeclaration(
-            [j.importSpecifier(j.identifier(importSpecifier))],
-            j.literal(source),
-          ),
+        let importDeclaration = j.importDeclaration(
+          [j.importSpecifier(j.identifier(importSpecifier))],
+          j.literal(source),
         );
+        let importIndex = path.value.body.findIndex((node) => node.type === 'ImportDeclaration');
+        if (importIndex > -1) {
+          path.value.body.splice(importIndex + 1, 0, importDeclaration);
+        } else {
+          path.value.body.unshift(importDeclaration);
+        }
       })
       .toSource(FORMATTING);
   }

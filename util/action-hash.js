@@ -1,5 +1,6 @@
 const ActionsMap = require('./actions-map');
 const FORMATTING = require('./formatting');
+const addComment = require('./add-comment');
 const processFilePath = require('./process-file-path');
 const addImportSpecifier = require('./add-import-specifier');
 
@@ -48,6 +49,63 @@ module.exports = function actionHash(file, j, shouldModify) {
         }
       })
       .toSource(FORMATTING);
+
+    code = j(code)
+      .find(j.MemberExpression, (path) => {
+        if (
+          path.object.type === 'ThisExpression' &&
+          path.property &&
+          path.property.name &&
+          ActionsMap.hasAction('actions', modifiedFilePath, path.property.name)
+        ) {
+          return true;
+        }
+
+        if (
+          path.object.type === 'ThisExpression' &&
+          path.property &&
+          path.property.name &&
+          path.property.name === 'send' &&
+          path.arguments &&
+          path.arguments.length &&
+          path.arguments[0].type === 'StringLiteral' &&
+          ActionsMap.hasAction('actions', modifiedFilePath, path.arguments[0].value)
+        ) {
+          return true;
+        }
+      })
+      .forEach((path) => {
+        addComment(
+          j,
+          path,
+          ` CODE MIGRATION HINT: \`this.${path.node.property.name}\` is now being clobbered by a migrated action`,
+        );
+      })
+      .toSource(FORMATTING);
+
+    code = j(code)
+      .find(j.CallExpression, (path) => {
+        if (
+          path.callee &&
+          path.callee.object &&
+          path.callee.object.type === 'ThisExpression' &&
+          path.callee.property &&
+          path.callee.property.name &&
+          path.callee.property.name === 'send' &&
+          path.arguments[0].type.includes('Literal') &&
+          ActionsMap.hasAction('actions', modifiedFilePath, path.arguments[0].value)
+        ) {
+          return true;
+        }
+      })
+      .forEach((path) => {
+        addComment(
+          j,
+          path,
+          ` CODE MIGRATION HINT: \`this.${path.node.arguments[0].value}\` is now being clobbered by a migrated action`,
+        );
+      })
+      .toSource();
 
     if (shouldAddImport) {
       code = addImportSpecifier(j, code, 'action', '@ember/object');

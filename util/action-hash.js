@@ -22,9 +22,9 @@ module.exports = function actionHash(file, j, shouldModify) {
         if (ActionsMap.hasAction('actions', modifiedFilePath, func.key.name)) {
           shouldAddImport = true;
           const actionFunc = j(`${func.key.name}: action()`).__paths[0].value.program.body[0];
-          actionFunc.body.expression.arguments.push(
-            j.functionExpression(null, func.params, func.body),
-          );
+          let newFunc = j.functionExpression(null, func.params, func.body);
+          newFunc.async = func.async;
+          actionFunc.body.expression.arguments.push(newFunc);
           j(path).insertBefore(actionFunc);
 
           return false;

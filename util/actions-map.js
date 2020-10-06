@@ -12,10 +12,8 @@ class ActionsMap {
 
   addItem(cacheName, key, actionName) {
     let cache = this.getCache(cacheName);
-    if (this.hasItem(cacheName, key) && !this.hasAction(cacheName, key, actionName)) {
-      let actions = this.getItem(cacheName, key);
-      actions.push(actionName);
-      cache[key] = actions;
+    if (cache[key]) {
+      cache[key].push(actionName);
     } else {
       cache[key] = [actionName];
     }

@@ -17,6 +17,9 @@ async function run() {
     let jsCache = ActionsMap.getCache('js');
     let hbsCache = ActionsMap.getCache('hbs');
 
+    console.log(jsCache);
+    console.log(hbsCache);
+
     Object.keys(jsCache).forEach((key) => {
       let jsActions = jsCache[key];
       let hbsActions = hbsCache[key];

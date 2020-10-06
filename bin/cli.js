@@ -17,7 +17,9 @@ async function run() {
     let jsCache = ActionsMap.getCache('js');
     let hbsCache = ActionsMap.getCache('hbs');
 
+    console.log('==== JS actions ====');
     console.log(jsCache);
+    console.log('==== HBS actions ====');
     console.log(hbsCache);
 
     Object.keys(jsCache).forEach((key) => {
@@ -30,6 +32,8 @@ async function run() {
         ActionsMap.map.set('actions', JSON.stringify(actionsCache));
       }
     });
+
+    console.log('==== Actions ====');
     console.log(ActionsMap.getCache('actions'));
 
     let modifyArgs = [].concat(args, '--should-modify=true');

@@ -8,9 +8,9 @@ module.exports = function transformer(file, api) {
 
   return j(file.source)
     .find(j.ImportDeclaration, (node) => {
-      let jsCache = ActionsMap.getCache('js');
-      return Object.keys(jsCache).find((key) => {
-        if (!jsCache[key].length) {
+      let actionsCache = ActionsMap.getCache('actions');
+      return Object.keys(actionsCache).find((key) => {
+        if (!actionsCache[key].length) {
           return false;
         }
         let source = node.source.value;

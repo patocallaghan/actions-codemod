@@ -10,6 +10,9 @@ module.exports = function transformer(file, api) {
     .find(j.ImportDeclaration, (node) => {
       let jsCache = ActionsMap.getCache('js');
       return Object.keys(jsCache).find((key) => {
+        if (!jsCache[key].length) {
+          return false;
+        }
         let source = node.source.value;
         let componentName = source.substring(source.lastIndexOf('/') + 1);
         return key.substring(key.lastIndexOf('/') + 1) === componentName;

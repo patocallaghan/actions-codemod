@@ -42,6 +42,8 @@ async function run() {
       await runTransform(__dirname, 'action-modifiers' /* transform name */, modifyArgs, 'hbs');
       console.log('==== Removing {{action}} from js ====');
       await runTransform(__dirname, 'action-hash' /* transform name */, modifyArgs, 'js');
+      console.log('==== Detecting imports of refactored classes ====');
+      await runTransform(__dirname, 'import-usage' /* transform name */, ['app', 'lib'], 'js');
     } else {
       await runTransform(
         __dirname,

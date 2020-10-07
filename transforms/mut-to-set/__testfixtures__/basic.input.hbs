@@ -1,0 +1,21 @@
+<Something
+  @onSelect={{action (mut this.something)}}
+/>	
+
+<Something
+  @onSelect={{action (mut this.something) true}}
+/>	
+
+<Something
+  @onSelect={{action (pick this.something) true}}
+/>
+
+<Something
+  @onSelect={{action (mut this.something) value="target.value" }}
+/>	
+
+{{component
+  onclick=(action (mut test) true)
+  onenter=(action (mut test))
+  oninput=(action (mut test) value="target.value")
+}}

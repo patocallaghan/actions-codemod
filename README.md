@@ -26,6 +26,8 @@ node ./bin/cli.js <TRANSFORM NAME> path/of/files/ or/some**/*glob.js
 <!--TRANSFORMS_START-->
 * [action-hash](transforms/action-hash/README.md)
 * [action-modifiers](transforms/action-modifiers/README.md)
+* [import-usage](transforms/import-usage/README.md)
+* [mut-to-set](transforms/mut-to-set/README.md)
 <!--TRANSFORMS_END-->
 
 ## Contributing

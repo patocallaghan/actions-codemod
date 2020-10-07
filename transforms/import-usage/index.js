@@ -6,8 +6,10 @@ const addComment = require('../../util/add-comment');
 module.exports = function transformer(file, api) {
   const j = getParser(api);
 
+  let modifiedKey = '';
   return j(file.source)
     .find(j.ImportDeclaration, (node) => {
+      modifiedKey = '';
       let actionsCache = ActionsMap.getCache('actions');
       return Object.keys(actionsCache).find((key) => {
         if (!actionsCache[key].length) {
@@ -15,14 +17,18 @@ module.exports = function transformer(file, api) {
         }
         let source = node.source.value;
         let componentName = source.substring(source.lastIndexOf('/') + 1);
-        return key.substring(key.lastIndexOf('/') + 1) === componentName;
+        let hasComponentName = key.substring(key.lastIndexOf('/') + 1) === componentName;
+        if (hasComponentName) {
+          modifiedKey = key;
+        }
+        return hasComponentName;
       });
     })
     .forEach((path) => {
       addComment(
         j,
         path,
-        ` CODE MIGRATION HINT: \`${path.node.source.value}\` has had its actions changed so this may affect this subclassing`,
+        ` CODE MIGRATION HINT: \`${modifiedKey}\` has had its actions changed so this may affect this subclassing`,
       );
     })
     .toSource(FORMATTING);

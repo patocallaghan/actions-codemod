@@ -28,6 +28,7 @@ node ./bin/cli.js <TRANSFORM NAME> path/of/files/ or/some**/*glob.js
 * [action-modifiers](transforms/action-modifiers/README.md)
 * [import-usage](transforms/import-usage/README.md)
 * [mut-to-set](transforms/mut-to-set/README.md)
+* [remove-deprecated-comments](transforms/remove-deprecated-comments/README.md)
 <!--TRANSFORMS_END-->
 
 ## Contributing

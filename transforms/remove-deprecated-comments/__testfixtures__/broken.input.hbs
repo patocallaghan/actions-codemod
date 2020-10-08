@@ -1,0 +1,49 @@
+{{!-- === ⚠️ THIS FILE CURRENTLY USES DEPRECATED PATTERNS ⚠️ === --}}
+{{!-- === 🔗 For more information visit https://go.inter.com/ember-best-practices 🔗 --}}
+{{!-- === 🚀 Please consider refactoring & removing some of the comments below when working on this file 🚀 --}}
+{{!-- template-lint-disable no-action --}}
+{{#if @customer.hasActiveTrialWithoutCreditCard}}
+  <IcBanner @type="warning">
+    <p data-test-trial-without-credit-card-banner>
+      Your account does not have a payment card. Your subscription will end on {{@customer.formattedSubscriptionWillBeCancelledAt
+      }}. After that date, you will no longer be able to use paid features of your Intercom products. <a
+        data-test-update-card-link
+        {{on "click" (set this.cardModalIsOpen true)}}
+      >
+        Add a payment card
+      </a>
+      to avoid any interruptions to your service.
+    </p>
+  </IcBanner>
+  <div class="h-8"></div>
+  {{#if this.cardModalIsOpen}}
+    <Billing::CreditCardModal @closeModal={{set this.cardModalIsOpen false}} />
+  {{/if}}
+{{else if @customer.subscriptionWillBeCancelled}}
+  <IcBanner @type="error">
+    <p data-test-cancel-subscription-banner>
+      <strong>
+        Your subscription will end on {{@customer.formattedSubscriptionWillBeCancelledAt
+        }}.
+      </strong>
+      After that date, you will no longer be able to use paid features of your Intercom products. <a
+        data-test-resume-subscription-link
+        {{action "showResumePendingCancellationModal"}}
+      >
+        Resume your subscription
+      </a>
+      to use your Intercom products without interruption.
+    </p>
+  </IcBanner>
+  <div class="h-8"></div>
+{{/if}}
+{{#if (and @customer.hasActiveSubscription @customer.pendingEarlyStageApplicant)}}
+  <IcBanner @type="warning">
+    <p data-test-early-stage-banner>
+      <strong>
+        Early Stage application pending.
+      </strong>
+    </p>
+  </IcBanner>
+  <div class="h-8"></div>
+{{/if}}

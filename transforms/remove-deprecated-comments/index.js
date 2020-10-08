@@ -20,12 +20,17 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
   visit(ast, (env) => {
     return {
       MustacheStatement(node) {
-        if (node.path.original === 'action') {
+        if (node.path && node.path.original === 'action') {
           hasAction = true;
         }
       },
       SubExpression(node) {
-        if (node.path.original === 'action') {
+        if (node.path && node.path.original === 'action') {
+          hasAction = true;
+        }
+      },
+      PathExpression(node) {
+        if (node.original === 'action') {
           hasAction = true;
         }
       },
@@ -33,7 +38,7 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
   });
 
   if (!hasAction && hasNoActionRule) {
-    return visit(ast, (env) => {
+    source = visit(ast, (env) => {
       return {
         Program(node) {
           let indexOfComment = node.body.findIndex(
@@ -49,9 +54,8 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
         },
       };
     });
-  } else {
-    return source;
   }
+  return source;
 };
 
 module.exports.type = 'hbs';

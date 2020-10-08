@@ -45,6 +45,13 @@ async function run() {
       await runTransform(__dirname, 'action-hash' /* transform name */, modifyArgs, 'js');
       console.log(chalk.yellow('==== Detecting imports of refactored classes ===='));
       await runTransform(__dirname, 'import-usage' /* transform name */, ['app', 'lib'], 'js');
+      console.log(chalk.yellow('==== Remove unnecessary no-action lint rules ===='));
+      await runTransform(
+        __dirname,
+        'remove-deprecated-comments' /* transform name */,
+        ['app', 'lib'],
+        'hbs',
+      );
     } else {
       await runTransform(
         __dirname,

@@ -47,9 +47,13 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
               node.value.includes('template-lint-disable no-action'),
           );
           if (hasOtherRule) {
-            node.body.splice(indexOfComment, 2);
+            node.body = node.body.filter((node, index) => {
+              return !(index === indexOfComment || index === indexOfComment + 1);
+            });
           } else {
-            node.body.splice(0, 8);
+            node.body = node.body.filter((node, index) => {
+              return index > 7;
+            });
           }
         },
       };

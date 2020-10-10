@@ -39,6 +39,7 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
 
   if (!hasAction && hasNoActionRule) {
     source = visit(ast, (env) => {
+      let { builders: b } = env.syntax;
       return {
         Program(node) {
           let indexOfComment = node.body.findIndex(
@@ -47,12 +48,16 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
               node.value.includes('template-lint-disable no-action'),
           );
           if (hasOtherRule) {
-            node.body = node.body.filter((node, index) => {
-              return !(index === indexOfComment || index === indexOfComment + 1);
+            node.body = node.body.map((node, index) => {
+              if (index === indexOfComment || index === indexOfComment + 1) {
+                return b.text('');
+              } else {
+                return node;
+              }
             });
           } else {
-            node.body = node.body.filter((node, index) => {
-              return index > 7;
+            node.body = node.body.map((node, index) => {
+              return index > 7 ? node : b.text('');
             });
           }
         },

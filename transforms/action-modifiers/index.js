@@ -10,15 +10,13 @@ function isDomHandler(name) {
     'onfocus',
     'onkeypress',
     'onkeydown',
-    '@enter',
-    '@key-down',
-    '@key-up',
-    '@key-press',
     'enter',
     'key-down',
     'key-up',
     'key-press',
-  ].includes(name);
+    'enter',
+    'escape-press',
+  ].some((event) => name.includes(event));
 }
 
 function isMutAction(node) {

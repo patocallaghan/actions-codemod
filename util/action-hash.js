@@ -63,8 +63,9 @@ module.exports = function actionHash(file, j, shouldModify) {
 
         if (
           path.object.type === 'ThisExpression' &&
-          path.property &&
-          path.property.name &&
+          path.callee &&
+          path.callee.property &&
+          path.callee.property.name &&
           (path.callee.property.name === 'send' || path.callee.property.name === 'sendAction') &&
           path.arguments &&
           path.arguments.length &&

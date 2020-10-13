@@ -65,7 +65,7 @@ module.exports = function actionHash(file, j, shouldModify) {
           path.object.type === 'ThisExpression' &&
           path.property &&
           path.property.name &&
-          path.property.name === 'send' &&
+          (path.callee.property.name === 'send' || path.callee.property.name === 'sendAction') &&
           path.arguments &&
           path.arguments.length &&
           path.arguments[0].type === 'StringLiteral' &&
@@ -91,7 +91,7 @@ module.exports = function actionHash(file, j, shouldModify) {
           path.callee.object.type === 'ThisExpression' &&
           path.callee.property &&
           path.callee.property.name &&
-          path.callee.property.name === 'send' &&
+          (path.callee.property.name === 'send' || path.callee.property.name === 'sendAction') &&
           path.arguments[0].type.includes('Literal') &&
           ActionsMap.hasAction('actions', modifiedFilePath, path.arguments[0].value)
         ) {

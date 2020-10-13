@@ -3,7 +3,22 @@ const ActionsMap = require('../../util/actions-map');
 const processFilePath = require('../../util/process-file-path');
 
 function isDomHandler(name) {
-  return ['oninput', 'onclick', 'onblur', 'onfocus', 'onkeypress', 'onkeydown'].includes(name);
+  return [
+    'oninput',
+    'onclick',
+    'onblur',
+    'onfocus',
+    'onkeypress',
+    'onkeydown',
+    '@enter',
+    '@key-down',
+    '@key-up',
+    '@key-press',
+    'enter',
+    'key-down',
+    'key-up',
+    'key-press',
+  ].includes(name);
 }
 
 function isMutAction(node) {

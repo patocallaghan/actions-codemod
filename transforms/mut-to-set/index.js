@@ -5,6 +5,27 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
     let { builders: b } = env.syntax;
 
     return {
+      ElementModifierStatement(node) {
+        if (node.path.original === 'action') {
+          if (node.params.length && node.params[0].type === 'SubExpression') {
+            let subexp = node.params[0];
+            if (subexp.path && subexp.path.original === 'mut') {
+              let setExp = b.sexpr('set', subexp.params.concat(...node.params.slice(1)));
+              if (
+                node.hash.pairs.find((pair) => pair.key === 'bubbles') &&
+                node.hash.pairs.find((pair) => pair.value.value === false)
+              ) {
+                return b.elementModifier(b.path('on'), [
+                  b.string('click'),
+                  b.sexpr('prevent-default', [setExp]),
+                ]);
+              } else {
+                return b.elementModifier(b.path('on'), [b.string('click'), setExp]);
+              }
+            }
+          }
+        }
+      },
       MustacheStatement(node) {
         if (node.path.original === 'action') {
           if (node.hash.pairs.length) {

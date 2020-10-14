@@ -1,0 +1,4 @@
+<div {{on "click" (set this.something true)}}></div>
+<div {{on "click" (prevent-default (set this.something true))}}></div>
+
+<a class="test" {{on "click" (prevent-default (set emojiFilter ""))}}>Hello</a>

@@ -42,24 +42,7 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
       let { builders: b } = env.syntax;
       return {
         Program(node) {
-          let indexOfComment = node.body.findIndex(
-            (node) =>
-              node.type === 'MustacheCommentStatement' &&
-              node.value.includes('template-lint-disable no-action'),
-          );
-          if (hasOtherRule) {
-            node.body = node.body.map((node, index) => {
-              if (index === indexOfComment || index === indexOfComment + 1) {
-                return b.text('{{!-- DELETE COMMENT --}}');
-              } else {
-                return node;
-              }
-            });
-          } else {
-            node.body = node.body.map((node, index) => {
-              return index > 7 ? node : b.text('{{!-- DELETE COMMENT --}}');
-            });
-          }
+          node.body.unshift(b.text('{{!-- CODE MIGRATION COMMENT - REMOVE LINT--}}'));
         },
       };
     });

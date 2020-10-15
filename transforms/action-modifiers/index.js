@@ -27,6 +27,27 @@ function isPassedAction(node) {
   return node.params[0].type === 'PathExpression';
 }
 
+function addComment(path, actionName, b) {
+  let parent = path.parent;
+  let program;
+  while (parent && !program) {
+    if (parent.node.type === 'Template') {
+      program = parent;
+    } else {
+      parent = parent.parent;
+    }
+  }
+  if (program) {
+    program.node.body = [
+      b.comment(
+        ` CODE MIGRATION HINT: \`${actionName}\` was migrated to a function action. Line: ${++path
+          .node.loc.start.line} `,
+      ),
+      b.text('\n'),
+    ].concat(program.node.body);
+  }
+}
+
 module.exports = function ({ source, path: filePath }, { parse, visit }) {
   const ast = parse(source);
   const options = getOptions();
@@ -57,6 +78,18 @@ module.exports = function ({ source, path: filePath }, { parse, visit }) {
             } else {
               ActionsMap.addItem('hbs', modifiedFilePath, actionName);
             }
+          } else {
+            let actionName = node.params[0].original;
+            if (shouldModify && ActionsMap.hasAction('actions', modifiedFilePath, actionName)) {
+              addComment(path, actionName, b);
+            }
+          }
+          return;
+        }
+        if (node.path && node.path.type === 'PathExpression') {
+          let value = node.path.original;
+          if (shouldModify && ActionsMap.hasAction('actions', modifiedFilePath, value)) {
+            addComment(path, value, b);
           }
         }
       },
@@ -79,6 +112,18 @@ module.exports = function ({ source, path: filePath }, { parse, visit }) {
               }
             } else {
               ActionsMap.addItem('hbs', modifiedFilePath, actionName);
+            }
+          }
+        }
+      },
+      ElementModifierStatement(node, path) {
+        if (node.path.original === 'action' && node.params.length) {
+          let actionName;
+          let firstParam = node.params[0];
+          if (firstParam.type === 'StringLiteral') {
+            actionName = firstParam.value;
+            if (shouldModify && ActionsMap.hasAction('actions', modifiedFilePath, actionName)) {
+              addComment(path, actionName, b);
             }
           }
         }

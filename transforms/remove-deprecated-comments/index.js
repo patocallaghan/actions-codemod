@@ -42,7 +42,7 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
       let { builders: b } = env.syntax;
       return {
         Program(node) {
-          node.body.unshift(b.text('{{!-- CODE MIGRATION COMMENT - REMOVE LINT--}}'));
+          node.body.unshift(b.text('{{!-- CODE MIGRATION COMMENT - REMOVE LINT--}}\n'));
         },
       };
     });

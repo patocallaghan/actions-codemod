@@ -43,7 +43,7 @@ module.exports = function ({ source /*, path*/ }, { parse, visit }) {
       return {
         Program(node) {
           node.body = [
-            b.comment(`{{!-- CODE MIGRATION COMMENT - REMOVE LINT--}}`),
+            b.MustacheCommentStatement(`{{!-- CODE MIGRATION COMMENT - REMOVE LINT--}}`),
             b.text('\n'),
           ].concat(node.body);
         },
